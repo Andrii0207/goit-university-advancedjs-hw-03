@@ -5,9 +5,14 @@ const API_KEY = 'live_5by06OFwHheRUp9VstzvBimzl4BKirSYssLaw602WJRBzfwsIyF76sXRpA
 
 axios.defaults.headers.common["x-api-key"] = API_KEY;
 
+
 const instance = axios.create({
     baseURL: BASE_URL,
 })
+
+// const searchParams = new URLSearchParams({
+//     order: ASC,
+// })
 
 function fetchBreeds() {
     // return fetch(`${BASE_URL}/breeds`)

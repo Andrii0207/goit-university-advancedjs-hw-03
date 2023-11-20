@@ -5,17 +5,20 @@ const refs = {
     select: document.querySelector('.breed-select'),
     loader: document.querySelector('.loader'),
     error: document.querySelector('.error'),
-    catInfo: document.querySelector('.cat-info')
+    catInfo: document.querySelector('.cat-info'),
+
 }
 
-refs.loader.style.display = "none";
+// refs.loader.style.display = "none";
 refs.error.style.display = "none";
 
 refs.select.addEventListener("change", onChangeSelect)
 
+
+
 fetchBreeds()
     .then(({ data }) => {
-        refs.loader.style.display = "block";
+        // refs.loader.style.display = "block";
         refs.select.insertAdjacentHTML('beforeend', createSelectData(data))
     })
     .catch(err => {
@@ -29,7 +32,7 @@ fetchBreeds()
     })
     .finally(() => {
         refs.loader.style.display = "none";
-        refs.error.style.display = "none";
+        // refs.error.style.display = "none";
     })
 
 function createSelectData(data) {
