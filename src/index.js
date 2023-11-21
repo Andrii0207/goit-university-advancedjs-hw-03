@@ -1,56 +1,63 @@
-import { fetchBreeds, fetchCatByBreed } from "./cat-api.js"
-import iziToast from 'izitoast'
+import "izitoast/dist/css/iziToast.min.css";
+import iziToastError from "./service.js"
+import SlimSelect from 'slim-select'
+import { fetchBreeds, fetchCatByBreed } from "./cat-api.js";
 
 const refs = {
     select: document.querySelector('.breed-select'),
     loader: document.querySelector('.loader'),
     error: document.querySelector('.error'),
     catInfo: document.querySelector('.cat-info'),
-
 }
 
-// refs.loader.style.display = "none";
-refs.error.style.display = "none";
+// const slimSelect = new SlimSelect({
+//     select: refs.select,
+//     settings: {
+//         allowDeselect: true
+//     }
+// })
 
 refs.select.addEventListener("change", onChangeSelect)
 
-
-
 fetchBreeds()
     .then(({ data }) => {
-        // refs.loader.style.display = "block";
-        refs.select.insertAdjacentHTML('beforeend', createSelectData(data))
+        refs.select.innerHTML = ('beforeend', createSelectData(data))
     })
     .catch(err => {
-        iziToast.error({
-            title: 'Error',
-            message: `Oops! Something went wrong! Try reloading the page! ${err}`,
-            timeout: 2000,
-            position: topCenter,
-        })
-        // return refs.error.style.display = "block"
+        iziToastError(err)
+        refs.error.style.display = "block";
+        return;
     })
     .finally(() => {
         refs.loader.style.display = "none";
-        // refs.error.style.display = "none";
-    })
+        refs.error.style.display = "none";
+    });
 
 function createSelectData(data) {
     console.log("DATA >>>", data)
-    return data.map(({ id, name }) => `<option value=${id}>${name}</option>`).join('')
-}
+    return data.map(({ id, name }) => `<option value=${id} data-placeholder="true">${name}</option>`).join('')
+};
+
+
+
 
 function onChangeSelect(evt) {
-    const selectedBreed = evt.target.value
+
+    refs.catInfo.innerHTML = "";
+    refs.loader.style.display = "block";
+
+    const selectedBreed = evt.target.value;
+
     fetchCatByBreed(selectedBreed)
         .then(dataBreed => createMarkup(dataBreed))
         .catch(err => console.log(err))
-}
+        .finally(() => refs.loader.style.display = "none");
+};
 
 function createMarkup(data) {
 
-    const { name, description, temperament } = data.data[0].breeds[0]
-    const { url } = data.data[0]
+    const { name, description, temperament } = data.data[0].breeds[0];
+    const { url } = data.data[0];
 
     const markupCatInfo = `<div class="wrapper-card">
       <img class="image-cat" src="${url}" alt="${name}" width="600" />

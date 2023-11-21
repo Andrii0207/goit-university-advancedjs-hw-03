@@ -25,6 +25,10 @@ body {
   margin-right: 30px;
 }
 
+.error {
+  display: none;
+}
+
 .loader {
   width: 12px;
   height: 12px;
@@ -32,9 +36,8 @@ body {
   display: block;
   margin: 15px auto;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
-  transform: translate(-50%, -50%);
   color: #ff3d00;
   box-sizing: border-box;
   animation: animloader 2s linear infinite;

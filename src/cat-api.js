@@ -10,10 +10,6 @@ const instance = axios.create({
     baseURL: BASE_URL,
 })
 
-// const searchParams = new URLSearchParams({
-//     order: ASC,
-// })
-
 function fetchBreeds() {
     // return fetch(`${BASE_URL}/breeds`)
     return instance.get('/breeds')
