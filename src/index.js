@@ -1,7 +1,7 @@
 import "izitoast/dist/css/iziToast.min.css";
-import iziToastError from "./service.js"
 import SlimSelect from 'slim-select'
 import { fetchBreeds, fetchCatByBreed } from "./cat-api.js";
+import { iziToastError } from "./service.js"
 
 const refs = {
     select: document.querySelector('.breed-select'),
@@ -10,18 +10,17 @@ const refs = {
     catInfo: document.querySelector('.cat-info'),
 }
 
-// const slimSelect = new SlimSelect({
-//     select: refs.select,
-//     settings: {
-//         allowDeselect: true
-//     }
-// })
+const PLACE_HOLDER = "choose a cat";
+
+const slimSelect = new SlimSelect({
+    select: refs.select,
+})
 
 refs.select.addEventListener("change", onChangeSelect)
 
 fetchBreeds()
     .then(({ data }) => {
-        refs.select.innerHTML = ('beforeend', createSelectData(data))
+        refs.select.innerHTML = ('beforeend', setSelectData(data))
     })
     .catch(err => {
         iziToastError(err)
@@ -33,31 +32,31 @@ fetchBreeds()
         refs.error.style.display = "none";
     });
 
-function createSelectData(data) {
-    console.log("DATA >>>", data)
-    return data.map(({ id, name }) => `<option value=${id} data-placeholder="true">${name}</option>`).join('')
-};
-
-
-
+function setSelectData(data) {
+    const selectsData = data.map(({ id, name }) => ({ text: name, value: id }))
+    return slimSelect.setData(
+        [{ 'placeholder': true, 'text': PLACE_HOLDER }, ...selectsData]
+    )
+}
 
 function onChangeSelect(evt) {
-
     refs.catInfo.innerHTML = "";
     refs.loader.style.display = "block";
-
     const selectedBreed = evt.target.value;
 
+    if (selectedBreed === PLACE_HOLDER) return
+
     fetchCatByBreed(selectedBreed)
-        .then(dataBreed => createMarkup(dataBreed))
+        .then(resp => {
+            const data = resp.data[0];
+            createMarkup({ breeds: data.breeds[0], url: data.url });
+        })
         .catch(err => console.log(err))
         .finally(() => refs.loader.style.display = "none");
 };
 
-function createMarkup(data) {
-
-    const { name, description, temperament } = data.data[0].breeds[0];
-    const { url } = data.data[0];
+function createMarkup({ breeds, url }) {
+    const { name, description, temperament } = breeds;
 
     const markupCatInfo = `<div class="wrapper-card">
       <img class="image-cat" src="${url}" alt="${name}" width="600" />
@@ -67,6 +66,5 @@ function createMarkup(data) {
         <p class="temperament-cat"><b>Temperament:</b> ${temperament}</p>
       </div>
     </div>`
-
     refs.catInfo.innerHTML = markupCatInfo;
 }

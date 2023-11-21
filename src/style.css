@@ -9,8 +9,8 @@ body {
   margin-bottom: 30px;
   padding: 5px;
   font-size: 17px;
-  color: aliceblue;
-  background-color: rgb(66, 104, 199);
+  border-radius: 5px;
+  background-color: rgb(248, 249, 252);
 }
 
 .wrapper-card {
@@ -23,10 +23,30 @@ body {
 
 .image-cat {
   margin-right: 30px;
+  border: 5px solid rgb(215, 222, 241);
+  border-radius: 50px;
+  overflow: hidden;
 }
 
 .error {
   display: none;
+}
+
+.breed-select {
+  width: 200px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
 }
 
 .loader {
@@ -38,7 +58,7 @@ body {
   position: absolute;
   top: 30%;
   left: 50%;
-  color: #ff3d00;
+  color: #3e70db;
   box-sizing: border-box;
   animation: animloader 2s linear infinite;
 }
