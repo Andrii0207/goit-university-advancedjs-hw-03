@@ -28,6 +28,7 @@ fetchBreeds()
         return;
     })
     .finally(() => {
+        refs.select.classList.toggle("visually-hidden");
         refs.loader.style.display = "none";
         refs.error.style.display = "none";
     });
@@ -51,7 +52,7 @@ function onChangeSelect(evt) {
             const data = resp.data[0];
             createMarkup({ breeds: data.breeds[0], url: data.url });
         })
-        .catch(err => console.log(err))
+        .catch(err => iziToastError(err))
         .finally(() => refs.loader.style.display = "none");
 };
 
